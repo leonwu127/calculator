@@ -5,33 +5,37 @@ public class SimpleCalculator {
     public String calculate(String input) {
         input = input.replace(" ", "");
 
-        char operator = ' ';
-        for (char ch : new char[] {'+', '-', '*', '/', '^'}) {
-            if (input.indexOf(ch) != -1) {
-                operator = ch;
+        Operator operator = null;
+        for (Operator op : Operator.values()) {
+            if (input.indexOf(op.getSymbol()) != -1) {
+                operator = op;
                 break;
             }
         }
 
-        String[] operands = input.split("\\" + operator);  // Escape the operator for regex
+        if (operator == null) {
+            throw new IllegalArgumentException("Invalid operator in input: " + input);
+        }
+
+        String[] operands = input.split("\\" + operator.getSymbol());
         int operand1 = Integer.parseInt(operands[0]);
         int operand2 = Integer.parseInt(operands[1]);
 
         int result = 0;
         switch (operator) {
-            case '+':
+            case ADD:
                 result = operand1 + operand2;
                 break;
-            case '-':
+            case SUBTRACT:
                 result = operand1 - operand2;
                 break;
-            case '*':
+            case MULTIPLY:
                 result = operand1 * operand2;
                 break;
-            case '/':
+            case DIVIDE:
                 result = operand1 / operand2;
                 break;
-            case '^':
+            case EXPONENT:
                 result = (int) Math.pow(operand1, operand2);
                 break;
         }
