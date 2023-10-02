@@ -17,9 +17,17 @@ public class SimpleCalculator {
             throw new IllegalArgumentException("Invalid operator in input: " + input);
         }
 
-        String[] operands = input.split("\\" + operator.getSymbol());
+        String[] operands = input.split("\\" + operator.getSymbol());  // Escape the operator for regex
+        if (operands.length != 2) {
+            throw new IllegalArgumentException("Input should contain exactly two operands: " + input);
+        }
+
         int operand1 = Integer.parseInt(operands[0]);
         int operand2 = Integer.parseInt(operands[1]);
+
+        if (operand1 < 0 || operand2 < 0) {
+            throw new IllegalArgumentException("Both operands should be positive integers: " + input);
+        }
 
         int result = 0;
         switch (operator) {

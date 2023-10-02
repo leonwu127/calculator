@@ -81,4 +81,34 @@ class SimpleCalculatorUTest {
         // then
         assertTrue(thrown.getMessage().contains("Invalid operator in input: 1&2"));
     }
+
+    @Test
+    public void _moreThanTwoOperands_throwsIllegalArgumentException() {
+        // given
+        SimpleCalculator calculator = new SimpleCalculator();
+
+        // when
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.calculate("1+2+3")
+        );
+
+        // then
+        assertTrue(thrown.getMessage().contains("Input should contain exactly two operands: 1+2+3"));
+    }
+
+    @Test
+    public void _negativeOperand_throwsIllegalArgumentException() {
+        // given
+        SimpleCalculator calculator = new SimpleCalculator();
+
+        // when
+        IllegalArgumentException thrown = assertThrows(
+                IllegalArgumentException.class,
+                () -> calculator.calculate("1+-2")
+        );
+
+        // then
+        assertTrue(thrown.getMessage().contains("Both operands should be positive integers: 1+-2"));
+    }
 }
