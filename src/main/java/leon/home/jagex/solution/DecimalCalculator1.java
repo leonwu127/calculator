@@ -2,7 +2,9 @@ package leon.home.jagex.solution;
 
 import leon.home.jagex.model.Operator;
 
-public class Calculator1 implements CalculatorAlgorithm{
+import java.text.DecimalFormat;
+
+public class DecimalCalculator1 extends Calculator1{
 
     @Override
     public String calculate(String input) {
@@ -28,15 +30,12 @@ public class Calculator1 implements CalculatorAlgorithm{
         return calculate(operator, operands[0], operands[1]);
     }
 
+    @Override
     public String calculate(Operator operator, String operand1, String operand2) {
-        int m = Integer.parseInt(operand1);
-        int n = Integer.parseInt(operand2);
+        double m = Double.parseDouble(operand1);
+        double n = Double.parseDouble(operand2);
 
-        if (m < 0 || n < 0) {
-            throw new IllegalArgumentException(String.format("Both operands should be positive integers: %s,%s",
-                    operand1, operand2));
-        }
-        int result = 0;
+        double result = 0;
         switch (operator) {
             case ADD:
                 result = m + n;
@@ -51,9 +50,19 @@ public class Calculator1 implements CalculatorAlgorithm{
                 result = m / n;
                 break;
             case EXPONENT:
-                result = (int) Math.pow(m, n);
+                result = Math.pow(m, n);
                 break;
         }
-        return String.valueOf(result);
+        return String.valueOf(formatValue(result));
     }
+
+    private String formatValue(double value) {
+        if (value == Math.floor(value)) {
+            return String.format("%.0f", value);
+        } else {
+            DecimalFormat df = new DecimalFormat("#.###");
+            return df.format(value);
+        }
+    }
+
 }

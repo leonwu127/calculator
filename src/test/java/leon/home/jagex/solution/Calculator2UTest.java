@@ -1,4 +1,4 @@
-package leon.home.jagex;
+package leon.home.jagex.solution;
 
 import leon.home.jagex.solution.Calculator2;
 import org.junit.jupiter.api.Test;

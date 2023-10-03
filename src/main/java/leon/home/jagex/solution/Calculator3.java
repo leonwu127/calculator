@@ -4,28 +4,42 @@ import leon.home.jagex.model.Operator;
 import leon.home.jagex.model.Parenthesis;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Calculator2 implements CalculatorAlgorithm {
+public class Calculator3 implements CalculatorAlgorithm{
 
-    private final Calculator1 simpleCalculator;
-    private final Map<Character, Integer> operatorPriorityMap;
+    private final DecimalCalculator1 simpleCalculator;
+    private final Map<Character, Operator> operatorPriorityMap;
 
 
-    public Calculator2() {
-        this.simpleCalculator = new Calculator1();
+    public Calculator3() {
+        this.simpleCalculator = new DecimalCalculator1();
         this.operatorPriorityMap = new HashMap<>();
-        operatorPriorityMap.put(Operator.ADD.getSymbol(), 1);
-        operatorPriorityMap.put(Operator.SUBTRACT.getSymbol(), 1);
-        operatorPriorityMap.put(Operator.MULTIPLY.getSymbol(), 2);
-        operatorPriorityMap.put(Operator.DIVIDE.getSymbol(), 2);
-        operatorPriorityMap.put(Operator.EXPONENT.getSymbol(), 3);
+        operatorPriorityMap.put(Operator.ADD.getSymbol(), Operator.ADD);
+        operatorPriorityMap.put(Operator.SUBTRACT.getSymbol(), Operator.SUBTRACT);
+        operatorPriorityMap.put(Operator.MULTIPLY.getSymbol(), Operator.MULTIPLY);
+        operatorPriorityMap.put(Operator.DIVIDE.getSymbol(), Operator.DIVIDE);
+        operatorPriorityMap.put(Operator.EXPONENT.getSymbol(), Operator.EXPONENT);
     }
 
     @Override
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
+        expression = preprocessNegativeNumbers(expression);
         List<String> postfix = infixToPostfix(expression);
         return evaluatePostfix(postfix);
+    }
+
+    private String preprocessNegativeNumbers(String expression) {
+        String regex = "-\\d+(\\.\\d+)?";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(expression);
+        while (matcher.find()) {
+            String negativeNumber = matcher.group();
+            expression = expression.replace(negativeNumber, "0" + negativeNumber);
+        }
+        return expression;
     }
 
     private List<String> infixToPostfix(String input) {
@@ -37,7 +51,7 @@ public class Calculator2 implements CalculatorAlgorithm {
             if (Character.isDigit(ch)) {
                 // if the character is a digit, continuously read the next character until it is not a digit
                 int start = i;
-                while (i + 1 < input.length() && Character.isDigit(input.charAt(i + 1))) {
+                while (i + 1 < input.length() && (Character.isDigit(input.charAt(i + 1)) || input.charAt(i + 1) == '.')) {
                     i++;
                 }
                 postfix.add(input.substring(start, i + 1));
@@ -53,7 +67,8 @@ public class Calculator2 implements CalculatorAlgorithm {
             } else if (operatorPriorityMap.containsKey(ch)) {
                 // if the character is an operator, pop the stack until an operator with lower priority is encountered
                 while (!stack.isEmpty() && operatorPriorityMap.containsKey(stack.peek())
-                        && operatorPriorityMap.get(stack.peek()) >= operatorPriorityMap.get(ch)) {
+                        && operatorPriorityMap.get(stack.peek()).getPriority()
+                        >= operatorPriorityMap.get(ch).getPriority()) {
                     postfix.add(String.valueOf(stack.pop()));
                 }
                 stack.push(ch);
@@ -78,11 +93,12 @@ public class Calculator2 implements CalculatorAlgorithm {
             } else {
                 String operand2 = stack.pop();
                 String operand1 = stack.pop();
-                String result = simpleCalculator.calculate(operand1 + str + operand2);
+                String result = simpleCalculator.calculate(operatorPriorityMap.get(str.charAt(0)), operand1, operand2);
                 stack.push(result);
             }
         }
 
         return stack.pop();
     }
+
 }
