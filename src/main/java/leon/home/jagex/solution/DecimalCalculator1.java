@@ -22,7 +22,7 @@ public class DecimalCalculator1 extends Calculator1{
             throw new IllegalArgumentException("Invalid operator in input: " + input);
         }
 
-        String[] operands = input.split("\\" + operator.getSymbol());  // Escape the operator for regex
+        String[] operands = input.split(String.format("\\%s", operator.getSymbol()));  // Escape the operator for regex
         if (operands.length != 2) {
             throw new IllegalArgumentException("Input should contain exactly two operands: " + input);
         }

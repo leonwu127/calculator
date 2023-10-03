@@ -45,7 +45,7 @@ class Calculator3UTest {
     }
 
     @Test
-    public void negativeExpressionWithParentheses_calculating_correctResult() {
+    public void negativeExpressionWithParentheses_negativeResult() {
         // given
         Calculator3 calculator = new Calculator3();
         String expression = "(-20 * 1.8) / 2";
@@ -56,4 +56,18 @@ class Calculator3UTest {
         // then
         assertEquals("-18", result);
     }
+
+    @Test  //-12.315 - 42
+    public void expressionWithNegativeDecimal_negativeResult() {
+        // given
+        Calculator3 calculator = new Calculator3();
+        String expression = "-12.315 - 42";
+
+        // when
+        String result = calculator.calculate(expression);
+
+        // then
+        assertEquals("-54.315", result);
+    }
+
 }
