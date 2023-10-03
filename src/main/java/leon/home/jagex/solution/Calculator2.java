@@ -5,7 +5,7 @@ import leon.home.jagex.model.Parenthesis;
 
 import java.util.*;
 
-public class Calculator2 implements CalculatorAlgorithm {
+public class Calculator2 {
 
     private final Calculator1 simpleCalculator;
     private final Map<Character, Integer> operatorPriorityMap;
@@ -21,7 +21,6 @@ public class Calculator2 implements CalculatorAlgorithm {
         operatorPriorityMap.put(Operator.EXPONENT.getSymbol(), 3);
     }
 
-    @Override
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
         List<String> postfix = infixToPostfix(expression);

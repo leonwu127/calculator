@@ -2,9 +2,8 @@ package leon.home.jagex.solution;
 
 import leon.home.jagex.model.Operator;
 
-public class Calculator1 implements CalculatorAlgorithm{
+public class Calculator1 {
 
-    @Override
     public String calculate(String input) {
         input = input.replace(" ", "");
 
@@ -20,7 +19,7 @@ public class Calculator1 implements CalculatorAlgorithm{
             throw new IllegalArgumentException("Invalid operator in input: " + input);
         }
 
-        String[] operands = input.split("\\" + operator.getSymbol());  // Escape the operator for regex
+        String[] operands = input.split(String.valueOf(operator.getSymbol()));  // Escape the operator for regex
         if (operands.length != 2) {
             throw new IllegalArgumentException("Input should contain exactly two operands: " + input);
         }

@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Calculator3 implements CalculatorAlgorithm{
+public class Calculator3 {
 
     private final DecimalCalculator1 simpleCalculator;
     private final Map<Character, Operator> operatorPriorityMap;
@@ -23,7 +23,6 @@ public class Calculator3 implements CalculatorAlgorithm{
         operatorPriorityMap.put(Operator.EXPONENT.getSymbol(), Operator.EXPONENT);
     }
 
-    @Override
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
         expression = preprocessNegativeNumbers(expression);

@@ -112,4 +112,19 @@ class Calculator1UTest {
         // then
         assertTrue(thrown.getMessage().contains("Both operands should be positive integers: 1+-2"));
     }
+
+    @Test
+    public void zeroDivisor_ThrowsArithmeticException() {
+        // given
+        Calculator1 calculator = new Calculator1();
+
+        // when
+        ArithmeticException thrown = assertThrows(
+                ArithmeticException.class,
+                () -> calculator.calculate("1/0")
+        );
+
+        // then
+        assertTrue(thrown.getMessage().contains("/ by zero"));
+    }
 }
