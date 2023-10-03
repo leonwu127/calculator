@@ -1,7 +1,11 @@
-package leon.home.jagex;
+package leon.home.jagex.solution;
 
-public class SimpleCalculator {
+import leon.home.jagex.algorithm.CalculatorAlgorithm;
+import leon.home.jagex.model.Operator;
 
+public class Calculator1 implements CalculatorAlgorithm {
+
+    @Override
     public String calculate(String input) {
         input = input.replace(" ", "");
 

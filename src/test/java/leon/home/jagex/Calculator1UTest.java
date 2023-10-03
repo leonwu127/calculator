@@ -1,16 +1,17 @@
 package leon.home.jagex;
 
+import leon.home.jagex.solution.Calculator1;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SimpleCalculatorUTest {
+class Calculator1UTest {
 
     // the test method name will follow the given_when_then naming convention
     @Test
-    public void _twoIntegerAddition_returnPositiveIntegerInString() {
+    public void simpleAddition_ReturnPositiveIntegerInString() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         String result = calculator.calculate("1+2");
@@ -20,9 +21,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _twoIntegerSubtraction_returnNegativeIntegerInString() {
+    public void simpleSubtraction_ReturnNegativeIntegerInString() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         String result = calculator.calculate("1-5");
@@ -32,9 +33,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _twoIntegerMultiplication_returnPositiveIntegerInString() {
+    public void simpleMultiplication_ReturnPositiveIntegerInString() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         String result = calculator.calculate("3*4");
@@ -44,9 +45,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _twoIntegerDivision_returnIntegerInString() {
+    public void simpleDivision_ReturnIntegerInString() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         String result = calculator.calculate("8/2");
@@ -56,9 +57,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _integerExponentiation_returnIntegerInString() {
+    public void simpleExponentiation_ReturnIntegerInString() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         String result = calculator.calculate("2^3");
@@ -68,9 +69,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _invalidOperator_throwsIllegalArgumentException() {
+    public void invalidOperator_ThrowsIllegalArgumentException() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         IllegalArgumentException thrown = assertThrows(
@@ -83,9 +84,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _moreThanTwoOperands_throwsIllegalArgumentException() {
+    public void moreThanTwoOperands_ThrowsIllegalArgumentException() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         IllegalArgumentException thrown = assertThrows(
@@ -98,9 +99,9 @@ class SimpleCalculatorUTest {
     }
 
     @Test
-    public void _negativeOperand_throwsIllegalArgumentException() {
+    public void negativeOperand_ThrowsIllegalArgumentException() {
         // given
-        SimpleCalculator calculator = new SimpleCalculator();
+        Calculator1 calculator = new Calculator1();
 
         // when
         IllegalArgumentException thrown = assertThrows(
