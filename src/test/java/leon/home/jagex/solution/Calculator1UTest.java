@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Calculator1UTest {
-
-    // the test method name will follow the given_when_then naming convention
     @Test
     public void simpleAddition_ReturnPositiveIntegerInString() {
         // given
@@ -110,7 +108,7 @@ class Calculator1UTest {
         );
 
         // then
-        assertTrue(thrown.getMessage().contains("Both operands should be positive integers: 1+-2"));
+        assertTrue(thrown.getMessage().contains("Input should contain only positive integers: 1+-2"));
     }
 
     @Test

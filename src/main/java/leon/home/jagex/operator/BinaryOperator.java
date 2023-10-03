@@ -1,6 +1,6 @@
-package leon.home.jagex.model;
+package leon.home.jagex.operator;
 
-public enum Operator {
+public enum BinaryOperator {
     ADD('+', 1),
     SUBTRACT('-', 1),
     MULTIPLY('*', 2),
@@ -10,7 +10,7 @@ public enum Operator {
     private final char symbol;
     private final int priority;
 
-    Operator(char symbol, int priority) {
+    BinaryOperator(char symbol, int priority) {
         this.symbol = symbol;
         this.priority = priority;
     }

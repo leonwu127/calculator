@@ -1,4 +1,4 @@
-package leon.home.jagex.model;
+package leon.home.jagex.operator;
 
 import java.util.Optional;
 
