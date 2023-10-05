@@ -1,13 +1,12 @@
 package leon.home.jagex.solution;
 
 import leon.home.jagex.operator.BinaryOperator;
-import leon.home.jagex.calculator.IntegerSimpleCalculator;
 import leon.home.jagex.calculator.TwoOperandCalculator;
-import static leon.home.jagex.util.ExpressionSplitter.*;
+import static leon.home.jagex.util.ExpressionHelper.*;
 
 public class Calculator1 {
     
-    TwoOperandCalculator simpleCalculator = new IntegerSimpleCalculator();
+    TwoOperandCalculator simpleCalculator = new TwoOperandCalculator();
 
     public String calculate(String expression) {
         expression = expression.replace(" ", "");

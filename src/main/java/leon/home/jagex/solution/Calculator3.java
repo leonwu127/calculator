@@ -1,61 +1,50 @@
 package leon.home.jagex.solution;
 
-import leon.home.jagex.algorithm.RPNForDecimals;
-import leon.home.jagex.algorithm.ReversePolishNotationAlgorithm;
-import leon.home.jagex.calculator.DecimalSimpleCalculator;
 import leon.home.jagex.calculator.TwoOperandCalculator;
+import leon.home.jagex.operator.UnaryOperator;
+import leon.home.jagex.parsers.RPNDecimalParser;
+import leon.home.jagex.parsers.ReversePolishNotationParser;
 
+import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static leon.home.jagex.util.ExpressionSplitter.operatorPriorityMap;
+import static leon.home.jagex.util.ExpressionHelper.getOperator;
 
 public class Calculator3 {
 
     private final TwoOperandCalculator simpleCalculator;
-    private final ReversePolishNotationAlgorithm rpn;
+    private final ReversePolishNotationParser rpn;
 
     public Calculator3() {
-        this.simpleCalculator = new DecimalSimpleCalculator();
-        this.rpn = new RPNForDecimals();
+        this.simpleCalculator = new TwoOperandCalculator();
+        this.rpn = new RPNDecimalParser();
     }
 
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
-        expression = preprocessNegativeNumbers(expression);
-        List<String> postfix = rpn.infixToPostfix(expression);
+        List<String> postfix = rpn.parse(expression);
         return evaluatePostfix(postfix);
     }
 
-    private String preprocessNegativeNumbers(String expression) {
-        String regex = "-\\d+(\\.\\d+)?";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(expression);
-        while (matcher.find()) {
-            String negativeNumber = matcher.group();
-            expression = expression.replace(negativeNumber, "0" + negativeNumber);
-        }
-        return expression;
-    }
-
     private String evaluatePostfix(List<String> postfix) {
-        Deque<String> stack = new ArrayDeque<>();
+        Deque<BigDecimal> stack = new ArrayDeque<>();
 
-        for (String str : postfix) {
-            if (Character.isDigit(str.charAt(0))) {
-                stack.push(str);
+        for (String token : postfix) {
+            if (rpn.isNumber(token)) {
+                stack.push(BigDecimal.valueOf(Double.parseDouble(token)));
+            } else if (token.equals(UnaryOperator.NEGATE.formattedSymbol())) {
+                stack.push(stack.pop().negate());
             } else {
-                String operand2 = stack.pop();
-                String operand1 = stack.pop();
-                String result = simpleCalculator.calculate(operatorPriorityMap.get(str.charAt(0)), operand1, operand2);
+                BigDecimal operand2 = stack.pop();
+                BigDecimal operand1 = stack.pop();
+                BigDecimal result = simpleCalculator.calculate(getOperator(token), operand1, operand2,3);
                 stack.push(result);
             }
         }
 
-        return stack.pop();
+        return stack.pop().stripTrailingZeros().toPlainString();
     }
 
 }

@@ -78,7 +78,7 @@ class Calculator1UTest {
         );
 
         // then
-        assertTrue(thrown.getMessage().contains("Invalid operator in input: 1&2"));
+        assertTrue(thrown.getMessage().contains("Invalid operator 1&2"));
     }
 
     @Test

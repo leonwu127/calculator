@@ -15,4 +15,8 @@ public enum Parenthesis {
     public char getSymbol() {
         return symbol;
     }
+
+    public String formatSymbol() {
+        return String.valueOf(symbol);
+    }
 }
