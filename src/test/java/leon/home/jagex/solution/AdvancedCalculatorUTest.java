@@ -54,7 +54,7 @@ class AdvancedCalculatorUTest {
         String expected = "Factorial operand should be a positive integer: -1.0";
 
         // when
-        Exception exception = assertThrows(InvalidFactorialException.class, () -> calculator.calculate(expression, 4));
+        Exception exception = assertThrows(InvalidFactorialException.class, () -> calculator.calculate(expression));
 
         // then
         assertEquals(expected, exception.getMessage());
@@ -67,7 +67,7 @@ class AdvancedCalculatorUTest {
         String expected = "Factorial operand should be a positive integer: 1.5";
 
         // when
-        Exception exception = assertThrows(InvalidFactorialException.class, () -> calculator.calculate(expression, 4));
+        Exception exception = assertThrows(InvalidFactorialException.class, () -> calculator.calculate(expression));
 
         // then
         assertEquals(expected, exception.getMessage());
