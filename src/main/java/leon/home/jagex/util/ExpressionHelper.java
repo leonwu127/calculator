@@ -1,25 +1,43 @@
 package leon.home.jagex.util;
 
+import leon.home.jagex.function.MathFunction;
 import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.operator.UnaryOperator;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ExpressionHelper {
 
-    public static final String REGEX_MATCH_HEX = "^(0[xX])?([0-9]*[a-fA-F][0-9a-fA-F]*)$";
-    public static final Map<String, Integer> operatorPriorityMap;
 
-    static {
-        operatorPriorityMap = new ConcurrentHashMap<>();
-        operatorPriorityMap.put(BinaryOperator.ADD.formattedSymbol(), 1);
-        operatorPriorityMap.put(BinaryOperator.SUBTRACT.formattedSymbol(), 1);
-        operatorPriorityMap.put(BinaryOperator.MULTIPLY.formattedSymbol(), 2);
-        operatorPriorityMap.put(BinaryOperator.DIVIDE.formattedSymbol(), 2);
-        operatorPriorityMap.put(UnaryOperator.NEGATE.formattedSymbol(), 3);
-        operatorPriorityMap.put(BinaryOperator.EXPONENT.formattedSymbol(), 4);
+    public static final Map<String, MathFunction> supportedFunctions = getSupportedFunctions();
+    public static final Map<Character, UnaryOperator> supportedUnaryOperators = getSupportedUnaryOperators();
+
+    private static Map<Character, UnaryOperator> getSupportedUnaryOperators() {
+        Map<Character, UnaryOperator> operatorMap = new HashMap<>();
+        for (UnaryOperator operator : UnaryOperator.values()) {
+            operatorMap.put(operator.getSymbol(), operator);
+        }
+        return operatorMap;
     }
+
+    private static Map<Character, BinaryOperator> getSupportedBinaryOperators() {
+        Map<Character, BinaryOperator> operatorMap = new HashMap<>();
+        for (BinaryOperator operator : BinaryOperator.values()) {
+            operatorMap.put(operator.getSymbol(), operator);
+        }
+        return operatorMap;
+    }
+
+    private static Map<String, MathFunction> getSupportedFunctions() {
+        Map<String, MathFunction> functionMap = new HashMap<>();
+        for (MathFunction function : MathFunction.values()) {
+            functionMap.put(function.getName(), function);
+        }
+        return functionMap;
+    }
+
 
     public static BinaryOperator getOperator(String token) {
         for (BinaryOperator op : BinaryOperator.values()) {

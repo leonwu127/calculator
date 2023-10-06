@@ -1,14 +1,14 @@
 package leon.home.jagex.solution;
 
+import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.parsers.RPNIntegerParser;
 import leon.home.jagex.parsers.ReversePolishNotationParser;
 import leon.home.jagex.calculator.TwoOperandCalculator;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 import static leon.home.jagex.util.ExpressionHelper.getOperator;
+import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
 
 
 public class Calculator2 {
@@ -31,7 +31,7 @@ public class Calculator2 {
         Deque<String> stack = new ArrayDeque<>();
 
         for (String token : postfix) {
-            if (rpn.isNumber(token)) {
+            if (isDecimalNumberToken(token)) {
                 stack.push(token);
             } else {
                 String operand2 = stack.pop();

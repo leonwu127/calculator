@@ -1,13 +1,28 @@
 package leon.home.jagex.parsers;
 
 import leon.home.jagex.exceptions.InvalidExpressionException;
+import leon.home.jagex.exceptions.UnrecognizedSymbolException;
+import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.operator.Parenthesis;
 
 import java.util.*;
 
-import static leon.home.jagex.util.ExpressionHelper.operatorPriorityMap;
+import static leon.home.jagex.util.TokenHelper.precedenceMap;
 
 public class RPNIntegerParser implements ReversePolishNotationParser {
+
+    private final Map<String, BinaryOperator> supportedBinaryOperators = supportedBinaryOperators();
+
+    private Map<String,BinaryOperator> supportedBinaryOperators() {
+        Map<String,BinaryOperator> supportedBinaryOperators = new HashMap<>();
+        supportedBinaryOperators.put(BinaryOperator.ADD.formattedSymbol(), BinaryOperator.ADD);
+        supportedBinaryOperators.put(BinaryOperator.SUBTRACT.formattedSymbol(), BinaryOperator.SUBTRACT);
+        supportedBinaryOperators.put(BinaryOperator.MULTIPLY.formattedSymbol(), BinaryOperator.MULTIPLY);
+        supportedBinaryOperators.put(BinaryOperator.DIVIDE.formattedSymbol(), BinaryOperator.DIVIDE);
+        supportedBinaryOperators.put(BinaryOperator.EXPONENT.formattedSymbol(), BinaryOperator.EXPONENT);
+        return supportedBinaryOperators;
+    }
+
     @Override
     public List<String> parse(String expression) {
         List<String> postfix = new ArrayList<>();   // create a list to store postfix expression
@@ -23,10 +38,10 @@ public class RPNIntegerParser implements ReversePolishNotationParser {
                     postfix.add(stack.pop());
                 }
                 stack.pop();
-            } else if (operatorPriorityMap.containsKey(token)) {
-                while (!stack.isEmpty() && operatorPriorityMap.containsKey(stack.peek())
-                        && operatorPriorityMap.get(stack.peek())
-                        >= operatorPriorityMap.get(token)) {
+            } else if (precedenceMap.containsKey(token)) {
+                while (!stack.isEmpty() && precedenceMap.containsKey(stack.peek())
+                        && precedenceMap.get(stack.peek())
+                        >= precedenceMap.get(token)) {
                     postfix.add(stack.pop());
                 }
                 stack.push(token);
@@ -53,20 +68,14 @@ public class RPNIntegerParser implements ReversePolishNotationParser {
 
             if (Character.isDigit(c)) {
                 currentToken.append(c);
-            } else {
+            } else if (isOperatorOrParenthesis(c)) {
                 if (currentToken.length() > 0) {
                     tokens.add(currentToken.toString());
-                    currentToken.setLength(0);
+                    currentToken = new StringBuilder();
                 }
-                if (operatorPriorityMap.containsKey(String.valueOf(c)) ||
-                        c == Parenthesis.LEFT_PAREN.getSymbol() ||
-                        c == Parenthesis.RIGHT_PAREN.getSymbol()) {
-                    tokens.add(String.valueOf(c));
-                } else {
-                    throw new InvalidExpressionException(String.format("Invalid operator in expression: %s, %s",
-                            c, expression));
-                }
-            }
+                tokens.add(String.valueOf(c));
+            } else throw new UnrecognizedSymbolException(String.format("Unrecognized symbol in expression: %s, %s",
+                    c, expression));
         }
 
         if (currentToken.length() > 0) {
@@ -76,7 +85,12 @@ public class RPNIntegerParser implements ReversePolishNotationParser {
         return tokens;
     }
 
-    @Override
+    private boolean isOperatorOrParenthesis(char c) {
+        return supportedBinaryOperators.containsKey(String.valueOf(c)) ||
+                c == Parenthesis.LEFT_PAREN.getSymbol() ||
+                c == Parenthesis.RIGHT_PAREN.getSymbol();
+    }
+
     public boolean isNumber(String token) {
         try {
             Integer.parseInt(token);

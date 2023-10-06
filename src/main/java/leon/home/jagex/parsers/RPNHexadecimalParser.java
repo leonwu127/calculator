@@ -1,19 +1,22 @@
 package leon.home.jagex.parsers;
 
-import leon.home.jagex.exceptions.InvalidExpressionException;
+import leon.home.jagex.exceptions.UnrecognizedSymbolException;
 import leon.home.jagex.exceptions.UnsupportedTokenException;
+import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.operator.Parenthesis;
 import leon.home.jagex.operator.UnaryOperator;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
-import static leon.home.jagex.util.ExpressionHelper.REGEX_MATCH_HEX;
-import static leon.home.jagex.util.ExpressionHelper.operatorPriorityMap;
+import static leon.home.jagex.util.TokenHelper.*;
 
 public class RPNHexadecimalParser implements ReversePolishNotationParser {
+    private final Map<String, BinaryOperator> supportedBinaryOperators;
+
+    public RPNHexadecimalParser(Map<String, BinaryOperator> supportedBinaryOperators) {
+        this.supportedBinaryOperators = supportedBinaryOperators;
+    }
+
     @Override
     public List<String> parse(String expression) {
         List<String> postfix = new ArrayList<>();   // create a list to store postfix expression
@@ -29,10 +32,10 @@ public class RPNHexadecimalParser implements ReversePolishNotationParser {
                     postfix.add(stack.pop());
                 }
                 stack.pop();
-            } else if (operatorPriorityMap.containsKey(token)) {
-                while (!stack.isEmpty() && operatorPriorityMap.containsKey(stack.peek())
-                        && operatorPriorityMap.get(stack.peek())
-                        >= operatorPriorityMap.get(token)) {
+            } else if (precedenceMap.containsKey(token)) {
+                while (!stack.isEmpty() && precedenceMap.containsKey(stack.peek())
+                        && precedenceMap.get(stack.peek())
+                        >= precedenceMap.get(token)) {
                     postfix.add(stack.pop());
                 }
                 stack.push(token);
@@ -53,57 +56,46 @@ public class RPNHexadecimalParser implements ReversePolishNotationParser {
     public List<String> tokenize(String expression) {
         List<String> tokens = new ArrayList<>();
         StringBuilder currentToken = new StringBuilder();
-        boolean isHex = false;
 
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
 
-            if (Character.isDigit(c) || c == '.') {
+            if (Character.isDigit(c) || Character.isLetter(c) || c == '.') {
                 currentToken.append(c);
-            } else {
-                if (Character.toLowerCase(c) >= 'a' && Character.toLowerCase(c) <= 'f'
-                || Character.toLowerCase(c) == 'x' && i == 1 && expression.charAt(i - 1) == '0') {
-                    currentToken.append(c);
-                    isHex = true;
-                    continue;
-                }
-
-                if (c == UnaryOperator.NEGATE.getSymbol() &&
-                        (i == 0 || expression.charAt(i - 1) == Parenthesis.LEFT_PAREN.getSymbol() ||
-                                operatorPriorityMap.containsKey(String.valueOf(expression.charAt(i - 1))))) {
-                    tokens.add("u-");
-                    continue;
-                }
-
+            } else if (isUnaryNegation(c, i, expression)) {
+                tokens.add(UnaryOperator.NEGATE.formattedSymbol());
+            } else if (isOperatorOrParenthesis(c)) {
                 if (currentToken.length() > 0) {
                     tokens.add(currentToken.toString());
                     currentToken.setLength(0);
-                    isHex = false;
                 }
-
-                if (operatorPriorityMap.containsKey(String.valueOf(c)) ||
-                        c == Parenthesis.LEFT_PAREN.getSymbol() ||
-                        c == Parenthesis.RIGHT_PAREN.getSymbol()) {
-                    tokens.add(String.valueOf(c));
-                } else {
-                    throw new InvalidExpressionException(String.format("Invalid token in expression: %s, %s",
-                            c, expression));
-                }
-            }
+                tokens.add(String.valueOf(c));
+            } else throw new UnrecognizedSymbolException(String.format("Unrecognized symbol in expression: %s, %s",
+                    c, expression));
         }
 
         if (currentToken.length() > 0) {
             tokens.add(currentToken.toString());
+            currentToken.setLength(0);
         }
 
         return tokens;
     }
 
-    @Override
+
+    private boolean isUnaryNegation(char c, int index, String expression) {
+        return c == UnaryOperator.NEGATE.getSymbol() && (index == 0 ||
+                expression.charAt(index - 1) == Parenthesis.LEFT_PAREN.getSymbol() ||
+                precedenceMap.containsKey(String.valueOf(expression.charAt(index - 1))));
+    }
+
+    private boolean isOperatorOrParenthesis(char c) {
+        return supportedBinaryOperators.containsKey(String.valueOf(c)) ||
+                c == Parenthesis.LEFT_PAREN.getSymbol() ||
+                c == Parenthesis.RIGHT_PAREN.getSymbol();
+    }
+
     public boolean isNumber(String token) {
-        if (token.matches("[\\-]?\\d+(\\.\\d+)?")) {
-            return true;
-        }
-        return token.matches(REGEX_MATCH_HEX);
+        return token.matches(REGEX_MATCH_HEX) || token.matches(REGEX_MATCH_BIG_DECIMAL);
     }
 }

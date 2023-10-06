@@ -4,78 +4,91 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class Calculator4UTest {
+class HexadecimalCalculatorTest {
 
     @Test
     public void simpleHexadecimalAddition_ReturnsCorrectResult() {
         // given
-        Calculator4 calculator = new Calculator4();
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
 
         // when
-        String result = calculator.calculate("1F+ 2D");
+        String result = calculator.calculate("0x1F+ 0x2D");
 
         // then
-        assertEquals("4C", result);
+        assertEquals("0x4C", result);
     }
 
     @Test
     public void simpleHexadecimalSubtraction_ReturnsCorrectResult() {
         // given
-        Calculator4 calculator = new Calculator4();
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
 
         // when
-        String result = calculator.calculate("2D - 1F");
+        String result = calculator.calculate("0x2D - 0x1F");
 
         // then
-        assertEquals("E", result);
+        assertEquals("0xE", result);
     }
 
     @Test
-    public void multipleOperatorsWithoutParenthesesWithHexadecimal_ReturnsCorrectResult() {
+    public void simpleHexadecimalMultiplication_ReturnsCorrectResult() {
         // given
-        Calculator4 calculator = new Calculator4();
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
 
         // when
-        String result = calculator.calculate("2 + 3 * 4");
+        String result = calculator.calculate("0x2 + 3 * 0x4");
 
         // then
-        assertEquals("14", result);  // Assuming operator precedence is handled correctly
+        assertEquals("0xE", result);  // Assuming operator precedence is handled correctly
     }
 
     @Test
-    public void multipleOperatorsWithParentheses_ReturnsCorrectResult() {
+    public void simpleHexadecimalWithParenthesis_ReturnsCorrectResult() {
         // given
-        Calculator4 calculator = new Calculator4();
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
 
         // when
-        String result = calculator.calculate("(2 + 3) * 4A");
+        String result = calculator.calculate("(2 + 3) * 0x4A");
 
         // then
-        assertEquals("172", result);  // Assuming hexadecimal output
+        assertEquals("0x172", result);  // Assuming hexadecimal output
     }
 
     @Test
     public void nestedParenthesesWithDecimal_ReturnsDecimalValue() {
         // given
-        Calculator4 calculator = new Calculator4();
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
 
         // when
-        String result = calculator.calculate("((2 + 3) * 2) + 4");
+        String result = calculator.calculate("((2 + 3) * 2) + 0x14");
 
         // then
-        assertEquals("14", result);  // Assuming hexadecimal output
+        assertEquals("0x1E", result);  // Assuming hexadecimal output
     }
 
     @Test
     public void negativeResult_ReturnsCorrectResult() {
         // given
-        Calculator4 calculator = new Calculator4();
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
 
         // when
-        String result = calculator.calculate("-5 + 3");
+        String result = calculator.calculate("-0x5A + 3");
 
         // then
-        assertEquals("FFFFFFFE", result);
+        assertEquals("-0x57", result);
     }
+
+    @Test
+    public void zeroDivisor_ThrowsException() {
+        // given
+        HexadecimalCalculator calculator = new HexadecimalCalculator();
+        // when
+        Exception exception = assertThrows(ArithmeticException.class, () -> {
+            calculator.calculate("0x5A / 0");
+        });
+        // then
+        assertEquals("/ by zero", exception.getMessage());
+    }
+
 
 }

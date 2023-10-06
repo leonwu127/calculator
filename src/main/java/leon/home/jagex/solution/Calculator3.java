@@ -11,6 +11,7 @@ import java.util.Deque;
 import java.util.List;
 
 import static leon.home.jagex.util.ExpressionHelper.getOperator;
+import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
 
 public class Calculator3 {
 
@@ -32,7 +33,7 @@ public class Calculator3 {
         Deque<BigDecimal> stack = new ArrayDeque<>();
 
         for (String token : postfix) {
-            if (rpn.isNumber(token)) {
+            if (isDecimalNumberToken(token)) {
                 stack.push(BigDecimal.valueOf(Double.parseDouble(token)));
             } else if (token.equals(UnaryOperator.NEGATE.formattedSymbol())) {
                 stack.push(stack.pop().negate());
