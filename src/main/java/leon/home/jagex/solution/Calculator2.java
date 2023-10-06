@@ -1,6 +1,5 @@
 package leon.home.jagex.solution;
 
-import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.parsers.RPNIntegerParser;
 import leon.home.jagex.parsers.ReversePolishNotationParser;
 import leon.home.jagex.calculator.TwoOperandCalculator;
@@ -36,7 +35,7 @@ public class Calculator2 {
             } else {
                 String operand2 = stack.pop();
                 String operand1 = stack.pop();
-                String result = simpleCalculator.calculate(getOperator(token),operand1, operand2);
+                String result = simpleCalculator.calculateBigDecimal(getOperator(token),operand1, operand2);
                 stack.push(result);
             }
         }

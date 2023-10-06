@@ -13,7 +13,7 @@ public class Calculator1 {
         BinaryOperator operator = getOperator(expression);
         String[] operands = getPositiveIntegers(expression, operator);
 
-        return simpleCalculator.calculate(operator, operands[0], operands[1]);
+        return simpleCalculator.calculateBigDecimal(operator, operands[0], operands[1]);
     }
 
 

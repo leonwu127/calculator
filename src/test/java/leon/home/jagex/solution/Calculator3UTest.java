@@ -70,4 +70,30 @@ class Calculator3UTest {
         assertEquals("-54.315", result);
     }
 
+    @Test
+    public void negativePowerOf2_negativeResult() {
+        // given
+        Calculator3 calculator = new Calculator3();
+        String expression = "-2 ^ 2";
+
+        // when
+        String result = calculator.calculate(expression);
+
+        // then
+        assertEquals("-4", result);
+    }
+
+    @Test
+    public void negativePowerOf2WithParentheses_positiveResult() {
+        // given
+        Calculator3 calculator = new Calculator3();
+        String expression = "(-2) ^ 2";
+
+        // when
+        String result = calculator.calculate(expression);
+
+        // then
+        assertEquals("4", result);
+    }
+
 }

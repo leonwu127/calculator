@@ -6,6 +6,7 @@ import leon.home.jagex.parsers.RPNDecimalParser;
 import leon.home.jagex.parsers.ReversePolishNotationParser;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -17,6 +18,8 @@ public class Calculator3 {
 
     private final TwoOperandCalculator simpleCalculator;
     private final ReversePolishNotationParser rpn;
+
+    private final int DEFAULT_SCALE = 3;
 
     public Calculator3() {
         this.simpleCalculator = new TwoOperandCalculator();
@@ -40,12 +43,12 @@ public class Calculator3 {
             } else {
                 BigDecimal operand2 = stack.pop();
                 BigDecimal operand1 = stack.pop();
-                BigDecimal result = simpleCalculator.calculate(getOperator(token), operand1, operand2,3);
+                BigDecimal result = simpleCalculator.calculateBigDecimal(getOperator(token), operand1, operand2, DEFAULT_SCALE);
                 stack.push(result);
             }
         }
 
-        return stack.pop().stripTrailingZeros().toPlainString();
+        return stack.pop().setScale(DEFAULT_SCALE, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
     }
 
 }

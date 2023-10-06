@@ -12,6 +12,12 @@ import static leon.home.jagex.util.ExpressionHelper.*;
 import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
 import static leon.home.jagex.util.TokenHelper.isHexadecimalNumberToken;
 
+/**
+ * This Calculator support the following features:
+ * 1. Support for hexadecimal numbers long integers only
+ * 2. Support for negative numbers
+ * 3. Support for +, -, *, /, ^ operators
+ */
 public class HexadecimalCalculator {
 
     private final Map<String, BinaryOperator> supportedBinaryOperators;

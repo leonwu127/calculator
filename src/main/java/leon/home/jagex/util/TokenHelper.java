@@ -14,6 +14,7 @@ public class TokenHelper {
     public static boolean isDecimalNumberToken(String token) {
         return token.matches(REGEX_MATCH_BIG_DECIMAL);
     }
+
     public static boolean isHexadecimalNumberToken(String token) {
         return token.matches(REGEX_MATCH_HEX);
     }
@@ -28,6 +29,7 @@ public class TokenHelper {
         precedenceMap.put(BinaryOperator.DIVIDE.formattedSymbol(), 2);
         precedenceMap.put(UnaryOperator.NEGATE.formattedSymbol(), 3);
         precedenceMap.put(BinaryOperator.EXPONENT.formattedSymbol(), 4);
+        precedenceMap.put(UnaryOperator.FACTORIAL.formattedSymbol(), 5);
         precedenceMap.put(MathFunction.SIN.getName(), 5);
         precedenceMap.put(MathFunction.COS.getName(), 5);
         precedenceMap.put(MathFunction.TAN.getName(), 5);

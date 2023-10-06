@@ -2,16 +2,18 @@ package leon.home.jagex.parsers;
 
 import leon.home.jagex.exceptions.InvalidExpressionException;
 import leon.home.jagex.exceptions.UnrecognizedSymbolException;
+import leon.home.jagex.function.MathFunction;
 import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.operator.Parenthesis;
 import leon.home.jagex.operator.UnaryOperator;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static leon.home.jagex.util.TokenHelper.REGEX_MATCH_BIG_DECIMAL;
 import static leon.home.jagex.util.TokenHelper.precedenceMap;
 
-public class RPNDecimalParser implements ReversePolishNotationParser {
+public class RPNAdvancedParser implements ReversePolishNotationParser{
 
     private final Map<String, BinaryOperator> supportedBinaryOperators = supportedBinaryOperators();
 
@@ -64,30 +66,24 @@ public class RPNDecimalParser implements ReversePolishNotationParser {
     @Override
     public List<String> tokenize(String expression) {
         List<String> tokens = new ArrayList<>();
-        StringBuilder currentToken = new StringBuilder();
+        StringBuilder decimalToken = new StringBuilder();
 
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
-
-            if (Character.isDigit(c) || c == '.') {
-                currentToken.append(c);
+            if (Character.isDigit(c) || c == '.' || Character.isLetter(c)) {
+                decimalToken.append(c);
             } else if (isUnaryNegation(c, i, expression)) {
                 tokens.add(UnaryOperator.NEGATE.formattedSymbol());
+            } else if (c == UnaryOperator.FACTORIAL.getSymbol()) {
+                pushDecimalToken(decimalToken, tokens);
+                tokens.add(UnaryOperator.FACTORIAL.formattedSymbol());
             } else if (isOperatorOrParenthesis(c)) {
-                if (currentToken.length() > 0) {
-                    tokens.add(currentToken.toString());
-                    currentToken.setLength(0);
-                }
+                pushDecimalToken(decimalToken, tokens);
                 tokens.add(String.valueOf(c));
             } else throw new UnrecognizedSymbolException(String.format("Unrecognized symbol in expression: %s, %s",
-                        c, expression));
+                    c, expression));
         }
-
-        if (currentToken.length() > 0) {
-            tokens.add(currentToken.toString());
-            currentToken.setLength(0);
-        }
-
+        pushDecimalToken(decimalToken, tokens);
         return tokens;
     }
 
@@ -99,12 +95,19 @@ public class RPNDecimalParser implements ReversePolishNotationParser {
 
     private boolean isOperatorOrParenthesis(char c) {
         return supportedBinaryOperators.containsKey(String.valueOf(c)) ||
+                c == UnaryOperator.FACTORIAL.getSymbol() ||
                 c == Parenthesis.LEFT_PAREN.getSymbol() ||
                 c == Parenthesis.RIGHT_PAREN.getSymbol();
+    }
+
+    private void pushDecimalToken(StringBuilder decimalToken, List<String> tokens) {
+        if (decimalToken.length() > 0) {
+            tokens.add(decimalToken.toString());
+            decimalToken.setLength(0);
+        }
     }
 
     public boolean isNumber(String token) {
         return token.matches(REGEX_MATCH_BIG_DECIMAL);
     }
-
 }

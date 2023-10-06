@@ -1,12 +1,13 @@
 package leon.home.jagex.util;
 
+import leon.home.jagex.exceptions.InvalidExpressionException;
+import leon.home.jagex.exceptions.InvalidOperatorException;
 import leon.home.jagex.function.MathFunction;
 import leon.home.jagex.operator.BinaryOperator;
 import leon.home.jagex.operator.UnaryOperator;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ExpressionHelper {
 
@@ -45,17 +46,17 @@ public class ExpressionHelper {
                 return op;
             }
         }
-        throw new IllegalArgumentException("Invalid operator " + token);
+        throw new InvalidOperatorException("Invalid operator " + token);
     }
 
     public static String[] getPositiveIntegers(String expression, BinaryOperator operator) {
         String[] operands = expression.split(String.format("\\%s", operator.getSymbol()));  // Escape the operator for regex
         if (operands.length != 2) {
-            throw new IllegalArgumentException("Input should contain exactly two operands: " + expression);
+            throw new InvalidExpressionException("Input should contain exactly two operands: " + expression);
         }
         for (String operand : operands) {
             if (!operand.matches("\\d+")) {
-                throw new IllegalArgumentException("Input should contain only positive integers: " + expression);
+                throw new InvalidExpressionException("Input should contain only positive integers: " + expression);
             }
         }
         return operands;

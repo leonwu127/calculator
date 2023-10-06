@@ -1,128 +1,140 @@
 package leon.home.jagex.solution;
 
+import leon.home.jagex.exceptions.InvalidExpressionException;
+import leon.home.jagex.exceptions.InvalidOperatorException;
 import leon.home.jagex.solution.Calculator1;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class Calculator1UTest {
+    Calculator1 calculator = new Calculator1();
     @Test
     public void simpleAddition_ReturnPositiveIntegerInString() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "1+2";
+        String expected = "3";
 
         // when
-        String result = calculator.calculate("1+2");
+        String result = calculator.calculate(expression);
 
         // then
-        assertEquals("3", result);
+        assertEquals(expected, result);
     }
 
     @Test
     public void simpleSubtraction_ReturnNegativeIntegerInString() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "1-2";
+        String expected = "-1";
 
         // when
-        String result = calculator.calculate("1-5");
+        String result = calculator.calculate(expression);
 
         // then
-        assertEquals("-4", result);
+        assertEquals(expected, result);
     }
 
     @Test
     public void simpleMultiplication_ReturnPositiveIntegerInString() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "3*4";
+        String expected = "12";
 
         // when
-        String result = calculator.calculate("3*4");
+        String result = calculator.calculate(expression);
 
         // then
-        assertEquals("12", result);
+        assertEquals(expected, result);
     }
 
     @Test
     public void simpleDivision_ReturnIntegerInString() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "8/2";
+        String expected = "4";
 
         // when
-        String result = calculator.calculate("8/2");
+        String result = calculator.calculate(expression);
 
         // then
-        assertEquals("4", result);
+        assertEquals(expected, result);
     }
 
     @Test
     public void simpleExponentiation_ReturnIntegerInString() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "2^3";
+        String expected = "8";
 
         // when
-        String result = calculator.calculate("2^3");
+        String result = calculator.calculate(expression);
 
         // then
-        assertEquals("8", result);
+        assertEquals(expected, result);
     }
 
     @Test
-    public void invalidOperator_ThrowsIllegalArgumentException() {
+    public void invalidOperator_ThrowsInvalidExpressionException() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "1&2";
+        String expectedMsg = "Invalid operator 1&2";
 
         // when
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> calculator.calculate("1&2")
+        InvalidOperatorException thrown = assertThrows(
+                InvalidOperatorException.class,
+                () -> calculator.calculate(expression)
         );
 
         // then
-        assertTrue(thrown.getMessage().contains("Invalid operator 1&2"));
+        assertTrue(thrown.getMessage().contains(expectedMsg));
     }
 
     @Test
-    public void moreThanTwoOperands_ThrowsIllegalArgumentException() {
+    public void moreThanTwoOperands_ThrowsInvalidExpressionException() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "1+2+3";
+        String expectedMsg = "Input should contain exactly two operands: 1+2+3";
 
         // when
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> calculator.calculate("1+2+3")
+        InvalidExpressionException thrown = assertThrows(
+                InvalidExpressionException.class,
+                () -> calculator.calculate(expression)
         );
 
         // then
-        assertTrue(thrown.getMessage().contains("Input should contain exactly two operands: 1+2+3"));
+        assertTrue(thrown.getMessage().contains(expectedMsg));
     }
 
     @Test
-    public void negativeOperand_ThrowsIllegalArgumentException() {
+    public void negativeOperand_ThrowsInvalidExpressionException() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "1+-2";
+        String expectedMsg = "Input should contain only positive integers: 1+-2";
 
         // when
-        IllegalArgumentException thrown = assertThrows(
-                IllegalArgumentException.class,
-                () -> calculator.calculate("1+-2")
+        InvalidExpressionException thrown = assertThrows(
+                InvalidExpressionException.class,
+                () -> calculator.calculate(expression)
         );
 
         // then
-        assertTrue(thrown.getMessage().contains("Input should contain only positive integers: 1+-2"));
+        assertTrue(thrown.getMessage().contains(expectedMsg));
     }
 
     @Test
     public void zeroDivisor_ThrowsArithmeticException() {
         // given
-        Calculator1 calculator = new Calculator1();
+        String expression = "1/0";
+        String expectedMsg = "/ by zero";
 
         // when
         ArithmeticException thrown = assertThrows(
                 ArithmeticException.class,
-                () -> calculator.calculate("1/0")
+                () -> calculator.calculate(expression)
         );
 
         // then
-        assertTrue(thrown.getMessage().contains("/ by zero"));
+        assertTrue(thrown.getMessage().contains(expectedMsg));
     }
 }

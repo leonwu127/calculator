@@ -8,6 +8,7 @@ public enum MathFunction {
 
     private final String name;
 
+
     MathFunction(String name) {
         this.name = name;
     }
@@ -16,6 +17,13 @@ public enum MathFunction {
         return name;
     }
 
-
+    public static boolean isFunction(String token) {
+        for (MathFunction function : MathFunction.values()) {
+            if (function.getName().equals(token)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

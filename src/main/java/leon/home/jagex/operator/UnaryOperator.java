@@ -1,7 +1,8 @@
 package leon.home.jagex.operator;
 
 public enum UnaryOperator {
-    NEGATE('-');
+    NEGATE('-'),
+    FACTORIAL('!');
 
     private final char symbol;
 

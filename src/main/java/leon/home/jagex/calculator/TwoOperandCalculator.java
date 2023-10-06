@@ -1,17 +1,18 @@
 package leon.home.jagex.calculator;
 
+import leon.home.jagex.exceptions.InvalidExpressionException;
 import leon.home.jagex.operator.BinaryOperator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class TwoOperandCalculator {
-    public String calculate(BinaryOperator operator, String operand1, String operand2) {
+    public String calculateBigDecimal(BinaryOperator operator, String operand1, String operand2) {
         long m = Long.parseLong(operand1);
         long n = Long.parseLong(operand2);
 
         if (m < 0 || n < 0) {
-            throw new IllegalArgumentException(String.format("Both operands should be positive integers: %s,%s",
+            throw new InvalidExpressionException(String.format("Both operands should be positive integers: %s,%s",
                     operand1, operand2));
         }
         long result = 0L;
@@ -57,7 +58,7 @@ public class TwoOperandCalculator {
         return result;
     }
 
-    public BigDecimal calculate(BinaryOperator operator, BigDecimal m, BigDecimal n, int scale) {
+    public BigDecimal calculateBigDecimal(BinaryOperator operator, BigDecimal m, BigDecimal n, int scale) {
 
         BigDecimal result = BigDecimal.ZERO;
         switch (operator) {
@@ -68,19 +69,15 @@ public class TwoOperandCalculator {
                 result = m.subtract(n);
                 break;
             case MULTIPLY:
-                result = m.multiply(n).setScale(scale, RoundingMode.HALF_UP);
+                result = m.multiply(n);
                 break;
             case DIVIDE:
-                result = m.divide(n,scale, RoundingMode.HALF_UP);
+                result = m.divide(n, scale, RoundingMode.HALF_UP);
                 break;
             case EXPONENT:
-                result = pow(m,n,scale);
+                result = BigDecimal.valueOf(Math.pow(m.doubleValue(), n.doubleValue()));
                 break;
         }
         return result;
-    }
-
-    private BigDecimal pow(BigDecimal m, BigDecimal n, int scale) {
-        return BigDecimal.valueOf(Math.pow(m.doubleValue(), n.doubleValue())).setScale(scale, RoundingMode.HALF_UP);
     }
 }
