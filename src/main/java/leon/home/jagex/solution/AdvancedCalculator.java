@@ -5,7 +5,6 @@ import leon.home.jagex.calculator.TwoOperandCalculator;
 import leon.home.jagex.function.MathFunction;
 import leon.home.jagex.operator.UnaryOperator;
 import leon.home.jagex.parsers.RPNAdvancedParser;
-import leon.home.jagex.parsers.RPNDecimalParser;
 import leon.home.jagex.parsers.ReversePolishNotationParser;
 
 import java.math.BigDecimal;
@@ -13,7 +12,6 @@ import java.math.RoundingMode;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static leon.home.jagex.util.ExpressionHelper.getOperator;
 import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
@@ -24,26 +22,22 @@ import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
  * 2. Support for sin(), cos(), tan(), log() functions
  * 3. Support for factorial (!) operator, which considered as a function
  */
-public class AdvancedCalculator {
+public class AdvancedCalculator implements Calculator{
     private final TwoOperandCalculator simpleCalculator;
     private final FunctionCalculator functionCalculator;
     private final ReversePolishNotationParser rpn;
 
-    private final int DEFAULT_SCALE = 3;
+    private int scale = 3;
 
-    public AdvancedCalculator() {
+    public AdvancedCalculator(int scale) {
         this.simpleCalculator = new TwoOperandCalculator();
         this.functionCalculator = new FunctionCalculator();
         this.rpn = new RPNAdvancedParser();
+        this.scale = scale;
     }
 
+    @Override
     public String calculate(String expression) {
-        expression = expression.replace(" ", "");
-        List<String> postfix = rpn.parse(expression);
-        return evaluatePostfix(postfix, DEFAULT_SCALE);
-    }
-
-    public String calculate(String expression, int scale) {
         expression = expression.replace(" ", "");
         List<String> postfix = rpn.parse(expression);
         return evaluatePostfix(postfix, scale);

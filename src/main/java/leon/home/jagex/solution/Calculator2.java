@@ -9,9 +9,13 @@ import java.util.*;
 import static leon.home.jagex.util.ExpressionHelper.getOperator;
 import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
 
-
-public class Calculator2 {
-
+/**
+ * This Calculator support the following features:
+ * 1. Support for multiple integers calculations only
+ * 2. Support for parentheses
+ * 3. Support for +, -, *, /, ^ operators
+ */
+public class Calculator2 implements Calculator{
     private final TwoOperandCalculator simpleCalculator;
     private final ReversePolishNotationParser rpn;
 
@@ -20,6 +24,7 @@ public class Calculator2 {
         this.rpn = new RPNIntegerParser();
     }
 
+    @Override
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
         List<String> postfix = rpn.parse(expression);

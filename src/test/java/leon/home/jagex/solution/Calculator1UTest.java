@@ -2,7 +2,6 @@ package leon.home.jagex.solution;
 
 import leon.home.jagex.exceptions.InvalidExpressionException;
 import leon.home.jagex.exceptions.InvalidOperatorException;
-import leon.home.jagex.solution.Calculator1;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

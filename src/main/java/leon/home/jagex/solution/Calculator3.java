@@ -14,7 +14,14 @@ import java.util.List;
 import static leon.home.jagex.util.ExpressionHelper.getOperator;
 import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
 
-public class Calculator3 {
+/**
+ * This Calculator support the following features:
+ * 1. Support for decimal numbers scaled to 3 decimal places
+ * 2. Support for negative numbers
+ * 3. Support for +, -, *, /, ^ operators
+ * 4. Support for parentheses
+ */
+public class Calculator3 implements Calculator{
 
     private final TwoOperandCalculator simpleCalculator;
     private final ReversePolishNotationParser rpn;
@@ -26,6 +33,7 @@ public class Calculator3 {
         this.rpn = new RPNDecimalParser();
     }
 
+    @Override
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
         List<String> postfix = rpn.parse(expression);

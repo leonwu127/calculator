@@ -47,16 +47,31 @@ This will compile the code, run the tests, and produce a JAR file in the `target
 java -jar target/calculator-project-1.0-SNAPSHOT.jar
 ```
 
+- Choose the available calculator, there are 5 options.
+
+```bash
+Choose a calculator:
+1. Calculator for Question 1
+2. Calculator for Question 2
+3. Calculator for Question 3
+4. Hexadecimal Calculator
+5. Advanced Calculator
+6. Exit
+```
+
 - Enter a mathematical expression with a single operator and two operands. The supported operations are addition, subtraction, multiplication, division, and exponentiation.
 
 ```bash
+You have choosen Calculator for Question 1
+Enter 'exit' to exit the program.
+
 Enter a mathematical expression: 2 + 2
 ```
 
 - The result of the expression will be displayed.
 
 ```bash
-Result: 4.0
+Result: 4
 ```
 
 - Enter `exit` to exit the program.

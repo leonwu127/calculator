@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AdvancedCalculatorUTest {
 
-    AdvancedCalculator calculator = new AdvancedCalculator();
+    AdvancedCalculator calculator = new AdvancedCalculator(4);
     @Test
     public void complexFloatingPointsExpression_calculateAndScaleTo4DecimalPlaces_resultWith4DecimalPlaces() {
         // given
@@ -15,7 +15,7 @@ class AdvancedCalculatorUTest {
         String expected = "3.0097";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -28,7 +28,7 @@ class AdvancedCalculatorUTest {
         String expected = "0.5982";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -41,7 +41,7 @@ class AdvancedCalculatorUTest {
         String expected = "2.7481";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -80,7 +80,7 @@ class AdvancedCalculatorUTest {
         String expected = "1";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -93,7 +93,7 @@ class AdvancedCalculatorUTest {
         String expected = "6";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -106,7 +106,7 @@ class AdvancedCalculatorUTest {
         String expected = "-0.944";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -119,7 +119,7 @@ class AdvancedCalculatorUTest {
         String expected = "-2.832";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);
@@ -132,7 +132,7 @@ class AdvancedCalculatorUTest {
         String expected = "2.832";
 
         // when
-        String result = calculator.calculate(expression, 4);
+        String result = calculator.calculate(expression);
 
         // then
         assertEquals(expected, result);

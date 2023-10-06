@@ -8,7 +8,7 @@ import leon.home.jagex.parsers.ReversePolishNotationParser;
 
 import java.util.*;
 
-import static leon.home.jagex.util.ExpressionHelper.*;
+import static leon.home.jagex.util.ExpressionHelper.getOperator;
 import static leon.home.jagex.util.TokenHelper.isDecimalNumberToken;
 import static leon.home.jagex.util.TokenHelper.isHexadecimalNumberToken;
 
@@ -17,8 +17,9 @@ import static leon.home.jagex.util.TokenHelper.isHexadecimalNumberToken;
  * 1. Support for hexadecimal numbers long integers only
  * 2. Support for negative numbers
  * 3. Support for +, -, *, /, ^ operators
+ * 4. Hex number should be prefixed with 0x
  */
-public class HexadecimalCalculator {
+public class HexadecimalCalculator implements Calculator{
 
     private final Map<String, BinaryOperator> supportedBinaryOperators;
     private final TwoOperandCalculator simpleCalculator;
@@ -40,7 +41,8 @@ public class HexadecimalCalculator {
         supportedBinaryOperators.put(BinaryOperator.EXPONENT.formattedSymbol(), BinaryOperator.EXPONENT);
         return supportedBinaryOperators;
     }
-    
+
+    @Override
     public String calculate(String expression) {
         expression = expression.replace(" ", "");
         return evaluatePostfix(rpn.parse(expression));
